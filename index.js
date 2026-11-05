@@ -23,3 +23,19 @@ function generateSecret(length, base, random = getRandomIntInclusive) {
 	}
 	return secret;
 }
+
+function evaluateGuess(secret, guess) {
+	const res = secret.split("").map((el, ind, arr) => {
+		if(el == guess[ind])
+			return "b";
+		else if(guess.split("").filter((elem) => elem == el).length != 0)
+			return "c";
+		else
+			return;
+	});
+	const bsum = res.filter((el) => el == "b").length;
+	const csum = res.filter((el) => el == "c").length;
+	console.log(res)
+	return {bulls: bsum, cows: csum};
+}
+
