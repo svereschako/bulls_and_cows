@@ -1,0 +1,25 @@
+const bases = {
+	10: "0123456789",
+	2: "01",
+	8: "01234567",
+	16: "0123456789ABCDEF"
+};
+
+function getRandomIntInclusive(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1) + min); // Максимум и минимум включаются
+}
+
+function generateSecret(length, base, random = getRandomIntInclusive) {
+	let secret = "";
+	let sign = "";
+	for(let i=0;i<length;i++){
+		sign = bases[base][random(bases[base][0], bases[base][bases[base].length-1])];
+		while(secret.indexOf(sign) != -1){
+			sign = bases[base][random(bases[base][0], bases[base][bases[base].length-1])];
+		}
+		secret += sign;
+	}
+	return secret;
+}
