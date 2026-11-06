@@ -46,3 +46,11 @@ function createDigitValidator(base) {
 	};
 }
 
+function isValidGuess(guess, length, base) {
+	const validator = createDigitValidator(base);
+	function checkRepeat(el, ind, arr) {
+		return arr.filter((elem) => elem == el).length == 1;
+	}
+	return guess.length == length && guess.split("").every(validator) && guess.split("").every(checkRepeat);
+}
+
