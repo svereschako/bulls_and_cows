@@ -34,8 +34,15 @@ function evaluateGuess(secret, guess) {
 			return;
 	});
 	const bsum = res.filter((el) => el == "b").length;
-	const csum = res.filter((el) => el == "c").length;
-	console.log(res)
+	const csum = res.filter((el) => el == "c").length;	
 	return {bulls: bsum, cows: csum};
+}
+
+function createDigitValidator(base) {
+	return function(char) {
+		if(bases[base].indexOf(char.toUpperCase()) != -1)
+			return true;
+		return false;
+	};
 }
 
