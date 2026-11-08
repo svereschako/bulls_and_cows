@@ -1,9 +1,13 @@
 const bases = {
-	10: "0123456789",
-	2: "01",
-	8: "01234567",
-	16: "0123456789ABCDEF"
+	Dec: "0123456789",
+	Bin: "01",
+	Oct: "01234567",
+	Hex: "0123456789ABCDEF"
 };
+
+let length;
+let base;
+let secret;
 
 function getRandomIntInclusive(min, max) {
   min = Math.ceil(min);
@@ -94,8 +98,13 @@ function createModal() {
 	document.body.append(overlay);
 	overlay.onclick = function(event) {
 		if(event.target.classList.contains("fixed-overlay") || event.target.classList.contains("btn-modal"))
-			if(lsel.value && bsel.value)
+			if(lsel.value && bsel.value){
+				length = Number(lsel.value);
+				base = bsel.value;
+				secret = generateSecret(length, base);
+				render();
 				event.currentTarget.remove();
+			}
 	};
 	bsel.onchange = function(e) {		
 		if(e.target.value == "Bin"){
@@ -106,4 +115,16 @@ function createModal() {
 	};
 }
 
+function render() {
+	const field = createElement({parent: document.body, classes: ["field"]});
+	const input = createElement({tag: "input", parent: field, classes: ["attempt"]});
+	const checkbtn = createElement({tag: "button", text: "Check", parent: field, classes: ["btn", "check-btn"]});
+	const history = createElement({parent: field, classes: ["history"]});
+	checkbtn.onclick = function() {
+		if(input.value == "")
+			return;
+		const res = evaluateGuess(secret, input.value);
+		const entry = createElement({text: `Attempt result: Bulls ${res.bulls} Cows ${res.cows}`, parent: history, classes: ["entry"]});
+	};
+}
 createModal();
