@@ -125,6 +125,22 @@ function render() {
 			return;
 		const res = evaluateGuess(secret, input.value);
 		const entry = createElement({text: `Attempt result: Bulls ${res.bulls} Cows ${res.cows}`, parent: history, classes: ["entry"]});
+		if(length == res.bulls)
+			showInfo();
 	};
 }
+
+function showInfo() {
+	const overlay = createElement({classes: ['fixed-overlay']});
+	const modal = createElement({parent: overlay, classes: ["modal-window"]});
+	createElement({text: "Game is over", parent: modal, classes: ["info"]});
+	createElement({tag: 'button', text: 'Ok', parent: modal, classes: ['btn', 'btn-modal']});
+	overlay.onclick = function(event) {
+		if(event.target.classList.contains("fixed-overlay") || event.target.classList.contains("btn-modal")){
+			field.value = "";
+			history.textContent = "";
+		}
+	};
+}
+
 createModal();
