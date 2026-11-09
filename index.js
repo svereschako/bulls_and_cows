@@ -9,8 +9,9 @@ let length;
 let base;
 let secret;
 const attempts = [];
-const ngbtn = createElement({tag: "button", text: "New game", parent: document.body, classes: ["btn"]});
-const trbtn = createElement({tag: "button", text: "Records", parent: document.body, classes: ["btn"]});
+const btns = createElement({parent: document.body, classes: ["btns"]});
+const ngbtn = createElement({tag: "button", text: "New game", parent: btns, classes: ["btn"]});
+const trbtn = createElement({tag: "button", text: "Records", parent: btns, classes: ["btn"]});
 
 function getRandomIntInclusive(min, max) {
   min = Math.ceil(min);
