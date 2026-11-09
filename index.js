@@ -8,6 +8,7 @@ const bases = {
 let length;
 let base;
 let secret;
+const attempts = [];
 
 function getRandomIntInclusive(min, max) {
   min = Math.ceil(min);
@@ -104,6 +105,7 @@ function createModal() {
 				secret = generateSecret(length, base);
 				render();
 				event.currentTarget.remove();
+				//console.log(secret)
 			}
 	};
 	bsel.onchange = function(e) {		
@@ -123,10 +125,28 @@ function render() {
 	checkbtn.onclick = function() {
 		if(input.value == "")
 			return;
+		if(!isValidGuess(input.value, length, base)){
+			input.value = "Attempt value in not correct";
+			input.style.color = "red";
+			return;
+		}		
+		if(attempts.includes(input.value)){
+			input.value = `Attempt ${input.value} has been already used`;
+			return;
+		}else
+			attempts.push(input.value);
 		const res = evaluateGuess(secret, input.value);
-		const entry = createElement({text: `Attempt result: Bulls ${res.bulls} Cows ${res.cows}`, parent: history, classes: ["entry"]});
-		if(length == res.bulls)
+		const entry = createElement({text: `${input.value} Attempt result: Bulls ${res.bulls} Cows ${res.cows}`, parent: history, classes: ["entry"]});
+		input.value = "";
+		if(length == res.bulls){
 			showInfo();
+			console.log("game is over")
+		}
+	};
+	input.onfocus = function(e) {
+		if(e.target.value != "")
+			e.target.value = "";
+			e.target.style.color = "";
 	};
 }
 
@@ -135,6 +155,7 @@ function showInfo() {
 	const modal = createElement({parent: overlay, classes: ["modal-window"]});
 	createElement({text: "Game is over", parent: modal, classes: ["info"]});
 	createElement({tag: 'button', text: 'Ok', parent: modal, classes: ['btn', 'btn-modal']});
+	document.body.append(overlay);
 	overlay.onclick = function(event) {
 		if(event.target.classList.contains("fixed-overlay") || event.target.classList.contains("btn-modal")){
 			field.value = "";
