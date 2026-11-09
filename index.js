@@ -9,6 +9,8 @@ let length;
 let base;
 let secret;
 const attempts = [];
+const ngbtn = createElement({tag: "button", text: "New game", parent: document.body, classes: ["btn"]});
+const trbtn = createElement({tag: "button", text: "Records", parent: document.body, classes: ["btn"]});
 
 function getRandomIntInclusive(min, max) {
   min = Math.ceil(min);
@@ -158,10 +160,15 @@ function showInfo() {
 	document.body.append(overlay);
 	overlay.onclick = function(event) {
 		if(event.target.classList.contains("fixed-overlay") || event.target.classList.contains("btn-modal")){
-			field.value = "";
-			history.textContent = "";
+			//field.value = "";
+			//history.textContent = "";
+			event.currentTarget.remove();
 		}
 	};
 }
 
+ngbtn.addEventListener("click", () => {
+	history.textContent = "";
+	createModal();
+});
 createModal();
