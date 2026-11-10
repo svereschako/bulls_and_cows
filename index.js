@@ -12,6 +12,10 @@ const attempts = [];
 const btns = createElement({parent: document.body, classes: ["btns"]});
 const ngbtn = createElement({tag: "button", text: "New game", parent: btns, classes: ["btn"]});
 const trbtn = createElement({tag: "button", text: "Records", parent: btns, classes: ["btn"]});
+const field = createElement({parent: document.body, classes: ["field"]});
+const input = createElement({tag: "input", parent: field, classes: ["attempt"]});
+const checkbtn = createElement({tag: "button", text: "Check", parent: field, classes: ["btn", "check-btn"]});
+var hstory = createElement({parent: field, classes: ["history"]});
 
 function getRandomIntInclusive(min, max) {
   min = Math.ceil(min);
@@ -106,7 +110,9 @@ function createModal() {
 				length = Number(lsel.value);
 				base = bsel.value;
 				secret = generateSecret(length, base);
-				render();
+				//render();
+				hstory.textContent = "";
+				attempts.length = 0;
 				event.currentTarget.remove();
 				console.log(secret)
 			}
@@ -120,43 +126,33 @@ function createModal() {
 	};
 }
 
-function render() {
-	if(attempts.length == 0){
-	const field = createElement({parent: document.body, classes: ["field"]});
-	const input = createElement({tag: "input", parent: field, classes: ["attempt"]});
-	const checkbtn = createElement({tag: "button", text: "Check", parent: field, classes: ["btn", "check-btn"]});
-	var history = createElement({parent: field, classes: ["history"]});
-	checkbtn.onclick = function() {
-		if(input.value == "")
-			return;
-		if(!isValidGuess(input.value, length, base)){
-			input.value = "Attempt value is not correct";
-			input.style.color = "red";
-			return;
-		}		
-		if(attempts.includes(input.value)){
-			input.value = `Attempt ${input.value} has been used`;
-			return;
-		}else
-			attempts.push(input.value);
-		const res = evaluateGuess(secret, input.value);
-		const entry = createElement({text: `${input.value} Attempt result: Bulls ${res.bulls} Cows ${res.cows}`, parent: history, classes: ["entry"]});
-		input.value = "";
-		if(length == res.bulls){
-			showInfo();
-			console.log("game is over")
-		}
-	};
-	input.onfocus = function(e) {
-		if(e.target.value != "")
-			e.target.value = "";
-			e.target.style.color = "";
-	};
-	}else{
-		document.querySelector(".history").textContent = "";
-		attempts.length = 0;
+checkbtn.onclick = function() {
+	if(input.value == "")
+		return;
+	if(!isValidGuess(input.value, length, base)){
+		input.value = "Attempt value is not correct";
+		input.style.color = "red";
+		return;
+	}		
+	if(attempts.includes(input.value)){
+		input.value = `Attempt ${input.value} has been used`;
+		return;
+	}else
+		attempts.push(input.value);
+	const res = evaluateGuess(secret, input.value);
+	const entry = createElement({text: `${input.value} Attempt result: Bulls ${res.bulls} Cows ${res.cows}`, parent: hstory, classes: ["entry"]});
+	input.value = "";
+	if(length == res.bulls){
+		showInfo();
+		console.log("game is over")
 	}
-}
+};
+input.onfocus = function(e) {
+	if(e.target.value != "")
+		e.target.value = "";
+		e.target.style.color = "";
+};	
+
 
 function showInfo() {
 	const overlay = createElement({classes: ['fixed-overlay']});
