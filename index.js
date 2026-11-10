@@ -23,9 +23,9 @@ function generateSecret(length, base, random = getRandomIntInclusive) {
 	let secret = "";
 	let sign = "";
 	for(let i=0;i<length;i++){
-		sign = bases[base][random(bases[base][0], bases[base][bases[base].length-1])];
+		sign = bases[base][random(0, bases[base].length-1)];
 		while(secret.indexOf(sign) != -1){
-			sign = bases[base][random(bases[base][0], bases[base][bases[base].length-1])];
+			sign = bases[base][random(0, bases[base].length-1)];
 		}
 		secret += sign;
 	}
