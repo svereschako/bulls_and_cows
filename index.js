@@ -106,18 +106,19 @@ function createModal() {
 	createElement({tag: 'button', text: 'Save', parent: modal, classes: ['btn', 'btn-modal']});
 	document.body.append(overlay);
 	overlay.onclick = function(event) {
-		if(event.target.classList.contains("fixed-overlay") || event.target.classList.contains("btn-modal"))
-			if(lsel.value && bsel.value){
-				length = Number(lsel.value);
-				base = bsel.value;
-				secret = generateSecret(length, base);
-				validator = createDigitValidator(base);
-				//render();
-				hstory.textContent = "";
-				attempts.length = 0;
-				event.currentTarget.remove();
-				console.log(secret)
-			}
+		if(!event.target.classList.contains("btn-modal"))
+			return;
+		if(lsel.value && bsel.value){
+			length = Number(lsel.value);
+			base = bsel.value;
+			secret = generateSecret(length, base);
+			validator = createDigitValidator(base);
+			//render();
+			hstory.textContent = "";
+			attempts.length = 0;
+			event.currentTarget.remove();
+			console.log(secret);
+		}
 	};
 	bsel.onchange = function(e) {		
 		if(e.target.value == "Bin"){
@@ -149,7 +150,7 @@ checkbtn.onclick = function() {
 	console.log(attempts)
 	if(length == res.bulls){
 		showInfo();
-		console.log("game is over")
+		input.disabled = true;
 	}
 };
 input.onfocus = function(e) {
@@ -183,5 +184,6 @@ function showInfo() {
 ngbtn.addEventListener("click", () => {
 	//history.textContent = "";
 	createModal();
+	input.disabled = false;
 });
 createModal();
