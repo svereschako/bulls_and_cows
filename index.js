@@ -8,6 +8,7 @@ const bases = {
 let length;
 let base;
 let secret;
+let validator;
 const attempts = [];
 const btns = createElement({parent: document.body, classes: ["btns"]});
 const ngbtn = createElement({tag: "button", text: "New game", parent: btns, classes: ["btn"]});
@@ -110,6 +111,7 @@ function createModal() {
 				length = Number(lsel.value);
 				base = bsel.value;
 				secret = generateSecret(length, base);
+				validator = createDigitValidator(base);
 				//render();
 				hstory.textContent = "";
 				attempts.length = 0;
@@ -153,6 +155,12 @@ input.onfocus = function(e) {
 		e.target.style.color = "";
 };	
 
+input.oninput = function(e) {	
+	if(!e.currentTarget.value.split("").every(validator))
+		e.currentTarget.style.color = "red";
+	else
+		e.currentTarget.style.color = "";
+};
 
 function showInfo() {
 	const overlay = createElement({classes: ['fixed-overlay']});
@@ -170,7 +178,7 @@ function showInfo() {
 }
 
 ngbtn.addEventListener("click", () => {
-	history.textContent = "";
+	//history.textContent = "";
 	createModal();
 });
 createModal();
