@@ -135,15 +135,18 @@ checkbtn.onclick = function() {
 		input.value = "Attempt value is not correct";
 		input.style.color = "red";
 		return;
-	}		
-	if(attempts.includes(input.value)){
+	}
+	if(attempts.length == 0)
+		attempts.push([input.value]);		
+	else if(attempts[attempts.length-1].includes(input.value)){
 		input.value = `Attempt ${input.value} has been used`;
 		return;
 	}else
-		attempts.push(input.value);
+		attempts.push([...attempts[attempts.length-1], input.value]);
 	const res = evaluateGuess(secret, input.value);
 	const entry = createElement({text: `${input.value} Attempt result: Bulls ${res.bulls} Cows ${res.cows}`, parent: hstory, classes: ["entry"]});
 	input.value = "";
+	console.log(attempts)
 	if(length == res.bulls){
 		showInfo();
 		console.log("game is over")
