@@ -9,6 +9,7 @@ let length;
 let base;
 let secret;
 let validator;
+const hash = {};
 const attempts = [];
 const btns = createElement({parent: document.body, classes: ["btns"]});
 const ngbtn = createElement({tag: "button", text: "New game", parent: btns, classes: ["btn"]});
@@ -67,6 +68,43 @@ function isValidGuess(guess, length, base) {
 	return guess.length == length && guess.split("").every(validator) && guess.split("").every(checkRepeat);
 }
 
+function countPossibleSecrets(length, base) {	
+	if(hash[base]&&hash[base][length]){
+		console.log("hash");
+		return hash[base][length];
+	}
+  const arr = bases[base].split("");
+  const result = [];
+
+  function backtrack(current, used) {
+    // Base case: if current permutation reaches length k, save it
+    if (current.length === length) {
+      result.push([...current]);
+      return;
+    }
+
+    for (let i = 0; i < arr.length; i++) {
+      // Skip if this index is already used in the current permutation
+      if (used[i]) continue;
+
+      used[i] = true;
+      current.push(arr[i]);
+
+      backtrack(current, used);
+
+      // Backtrack: undo the choice for the next iteration
+      current.pop();
+      used[i] = false;
+    }
+  }
+
+  backtrack([], Array(arr.length).fill(false));	
+	if(!hash[base])
+		hash[base] = {};
+	hash[base][length] = result.length;
+	return result.length;
+}
+
 function createElement(options) {
  // Default values
  const { tag = 'div', text = '', parent, classes = [] } = options;
@@ -112,12 +150,11 @@ function createModal() {
 			length = Number(lsel.value);
 			base = bsel.value;
 			secret = generateSecret(length, base);
-			validator = createDigitValidator(base);
-			//render();
+			validator = createDigitValidator(base);			
 			hstory.textContent = "";
 			attempts.length = 0;
 			event.currentTarget.remove();
-			console.log(secret);
+			console.log(secret, countPossibleSecrets(length, base));
 		}
 	};
 	bsel.onchange = function(e) {		
