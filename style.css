@@ -27,6 +27,13 @@ body {
   border-radius: 10px;    
 }
 
+.final-modal {
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
+  row-gap: 10px;
+}
+
 .modal-window select {
   height: 25px;
 }

@@ -9,6 +9,8 @@ let length;
 let base;
 let secret;
 let validator;
+let start;
+let end;
 const hash = {};
 const attempts = [];
 const btns = createElement({parent: document.body, classes: ["btns"]});
@@ -155,6 +157,7 @@ function createModal() {
 			attempts.length = 0;
 			event.currentTarget.remove();
 			console.log(secret, countPossibleSecrets(length, base));
+			start = new Date();
 		}
 	};
 	bsel.onchange = function(e) {		
@@ -186,8 +189,9 @@ checkbtn.onclick = function() {
 	input.value = "";
 	console.log(attempts)
 	if(length == res.bulls){
+		end = new Date();
 		showInfo();
-		input.disabled = true;
+		input.disabled = true;		
 	}
 };
 input.onfocus = function(e) {
@@ -205,8 +209,10 @@ input.oninput = function(e) {
 
 function showInfo() {
 	const overlay = createElement({classes: ['fixed-overlay']});
-	const modal = createElement({parent: overlay, classes: ["modal-window"]});
+	const modal = createElement({parent: overlay, classes: ["modal-window", "final-modal"]});
+	const elapsed = end.getTime() - start.getTime();
 	createElement({text: "Game is over", parent: modal, classes: ["info"]});
+	createElement({text: `${attempts.length} attempts used within ${Math.round(elapsed/1000)} seconds`, parent: modal});
 	createElement({tag: 'button', text: 'Ok', parent: modal, classes: ['btn', 'btn-modal']});
 	document.body.append(overlay);
 	overlay.onclick = function(event) {
