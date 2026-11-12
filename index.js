@@ -42,9 +42,9 @@ function generateSecret(length, base, random = getRandomIntInclusive) {
 
 function evaluateGuess(secret, guess) {
 	const res = secret.split("").map((el, ind, arr) => {
-		if(el == guess[ind])
+		if(el == guess[ind].toUpperCase())
 			return "b";
-		else if(guess.split("").filter((elem) => elem == el).length != 0)
+		else if(guess.split("").filter((elem) => elem.toUpperCase() == el).length != 0)
 			return "c";
 		else
 			return;
